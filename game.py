@@ -12,7 +12,35 @@ def flush_to_stdout(c):
     else:
         sys.stdout.write(c.decode("utf-8"))
         sys.stdout.flush()
+def getkey():
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)
+    new = termios.tcgetattr(fd)
+    new[3] = new[3] & ~termios.ICANON & ~termios.ECHO
+    new[6][termios.VMIN] = 1
+    new[6][termios.VTIME] = 0
+    termios.tcsetattr(fd, termios.TCSANOW, new)
+    c = None
+    try:
+        c = os.read(fd, 1)       
+        flush_to_stdout(c)
+    finally:
+        termios.tcsetattr(fd, termios.TCSAFLUSH, old)
+    if c == b'\x7f': # Backspace/delete is hit
+        return "delete"
+    return c.decode("utf-8")
 
+def get_word():
+    s = ""
+    while True:
+        a = getkey()
+        # if ENTER or SPACE is hit
+        if a == " " or a == "\n": 
+            return s
+        elif a == "delete":
+            s = s[:-1]
+        else:
+            s += a
 def pose1():
 	print(barre+tiret+tiret+tiret+tiret+tiret+tiret+tiret)
 	pose = 1
