@@ -30,17 +30,13 @@ def getkey():
         return "delete"
     return c.decode("utf-8")
 
-def get_word():
+def if_space():
     s = ""
-    while True:
-        a = getkey()
-        # if ENTER or SPACE is hit
-        if a == " " or a == "\n": 
-            return s
-        elif a == "delete":
-            s = s[:-1]
-        else:
-            s += a
+    a = getkey()
+    # if ENTER or SPACE is hit
+    if a == " ": 
+    	return s
+
 def pose1():
 	print(barre+tiret+tiret+tiret+tiret+tiret+tiret+tiret)
 	pose = 1
@@ -77,7 +73,7 @@ def espaceClicked():
 	if espace == True:
 		if pose == 4 or pose == 5:
 			nbDePoint = nbDePoint + 1
-while True:
+while if_space() != s :
 	pose1()
 	time.sleep(0.115)
 	pose2()
